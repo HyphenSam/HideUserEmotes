@@ -1,0 +1,13 @@
+{
+    "name": "HideUserEmotes",
+    "description": "Hides messages from a specific user when the message only contains emotes.",
+    "authors": [
+    {
+        "name": "HyphenSam",
+        "id": "143193767728513024"
+    }
+    ],
+    "main": "index.js",
+    "version": "1.0.0",
+    "settings": "Settings.jsx"
+}
