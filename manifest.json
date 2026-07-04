@@ -8,6 +8,5 @@
     }
     ],
     "main": "index.js",
-    "version": "1.0.0",
-    "settings": "Settings.jsx"
+    "version": "1.0.0"
 }

@@ -1,26 +1,19 @@
-import Settings from "./Settings.jsx";
-
 const { findByProps } = vendetta.metro;
 const { storage } = vendetta.plugin;
+const { React } = vendetta;
+const { Forms, TextInput } = findByProps("Form", "FormSection");
 
 const FluxDispatcher = findByProps("FluxDispatcher")?.FluxDispatcher;
 
 function shouldHideMessage(msg) {
     const content = msg.content || "";
-
-    // Don't hide messages with attachments, embeds, or stickers
     const hasAttachments = (msg.attachments?.length > 0)
         || (msg.embeds?.length > 0)
         || (msg.sticker_items?.length > 0);
     if (hasAttachments) return false;
-
-    // Don't hide genuinely empty messages
     if (content.trim().length === 0) return false;
 
-    // Strip custom Discord emotes
     let stripped = content.replace(/<a?:[a-zA-Z0-9_]+:[0-9]+>/g, "");
-
-    // Strip Unicode emojis and modifiers
     stripped = stripped.replace(/\p{Extended_Pictographic}/gu, "");
     stripped = stripped.replace(/[\u{1F3FB}-\u{1F3FF}]/gu, "");
     stripped = stripped.replace(/[\u200D\uFE0F]/gu, "");
@@ -29,6 +22,23 @@ function shouldHideMessage(msg) {
 }
 
 let interceptor = null;
+
+function Settings() {
+    const [value, setValue] = React.useState(storage.targetUserId || "");
+
+    return React.createElement(Forms.Form, null,
+        React.createElement(Forms.FormSection, { title: "Target User ID" },
+            React.createElement(TextInput, {
+                value: value,
+                onChange: (v) => {
+                    setValue(v);
+                    storage.targetUserId = v;
+                },
+                placeholder: "Enter Discord User ID"
+            })
+        )
+    );
+}
 
 export default {
     onLoad() {
@@ -66,14 +76,13 @@ export default {
 
     onUnload() {
         if (!interceptor || !FluxDispatcher) return;
-
         const interceptors = FluxDispatcher._interceptors;
         if (interceptors) {
             const index = interceptors.indexOf(interceptor);
             if (index > -1) interceptors.splice(index, 1);
         }
-
         interceptor = null;
     },
+
     settings: Settings
 };
