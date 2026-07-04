@@ -7,7 +7,7 @@
         "id": "143193767728513024"
     }
     ],
-    "main": "./index.js",
+    "main": "index.js",
     "version": "1.0.0",
-    "settings": "./Settings.jsx"
+    "settings": "Settings.jsx"
 }
